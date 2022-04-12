@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: rgb(66,133,244);
+background: linear-gradient(90deg, rgba(66,133,244,1) 0%, rgba(66,133,244,1) 35%, rgba(219,68,55,1) 100%);
+    margin: 30px 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, p, span, strong, strike, a {
+    font-family: 'Montserrat', sans-serif;
+}
+
+#tasks_title {
+    text-align: center;
+    color: #222;
+    margin-bottom: -50px;
+    text-shadow: 0 3px 5px #222;
+}
+
+.replit {
+    opacity: 0.2;
+}
+
+#title{
+    flex: 6;
+}
+
+#submit{
+    flex: 1;
+}
+#tasks_container{
+    width: 100%;
+    height: auto;
+    // #details_wrapper {
+    //     display: none;
+    //     width: 40%;
+    //     height: auto;
+    //     background-color: #fff;
+    //     color: #222;
+    //     position: fixed;
+    //     align-self: center;
+    //     border: #4285f4 solid 2px;
+    //     border-radius: 5px;
+    //     padding: 20px;
+    //     margin: 0 auto;
+    //     top: 50%; left: 50%; /* à 50%/50% du parent référent */
+    //     transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
+    //     z-index: 15;
+    // }
+    #task-container {
+        width: 100%;
+        height: auto;
+        margin: 100px auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        #form_wrapper {
+            width: 100%;
+            height: auto;
+            position: -webkit-sticky;
+            position: sticky;
+            z-index: 6;
+            top: 0;
+            #form {
+                width: 70%;
+                height: auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #fff;
+                margin: 0 auto;
+                padding: 50px;
+                box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+                gap: 30px;
+                border-radius: 5px;
+
+                #nb_of_tasks {
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    top: -60px;
+                    right: -30px;
+                    font-size: 21px;
+                    font-weight: bold;
+                    color: #DB4437;
+                    background-color: #fff;
+                    border-radius: 50%;
+                    padding: 10px;
+                    width: 15px;
+                    height: 15px;
+                    box-shadow: 0 9px 10px rgba(0,0,0,0.25);
+                }
+
+                #title, #submit {
+                    min-height: 50px;
+                    padding: 10px;
+                    font-size: 21px;
+                    border: none;
+                }
+                #title {
+                    width: 70%;
+                    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+                    border-radius: 5px;
+                    &:focus {
+                        outline: none;
+                        animation: growbottom 0.5s both;
+                    }
+                }
+                #submit {
+                    width: 30%;
+                    background-color: #fff;
+                    color: #4285F4;
+                    border: 2px solid #4285F4;
+                    font-weight: bold;
+                    border-radius: 5px;
+                    box-shadow: 0 9px 10px rgba(0,0,0,0.25);
+                    &:hover {
+                        animation: changecolor 1s both;
+                    }
+                }
+
+            }
+        }
+        #list_wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 73%;
+            margin: 50px auto;
+            .task_wrapper {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                box-shadow: 0 9px 10px rgba(0,0,0,0.25);
+                padding: 20px;
+                border-radius: 5px;
+                background-color: #fff;
+                color: white;
+                font-weight: bold;
+                span.title {
+                    font-size: 18px;
+                    color: #222;
+                }
+                button {
+                    border: none;
+                    border-radius: 5px;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 16px;
+                    box-shadow: 0 9px 10px rgba(0,0,0,0.25);
+                }
+                .the_buttons {
+                    width: 26%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                }
+            }
+        }
+    }
+}
+
+
+// ANIMATIONS
+/* ----------------------------------------------
+ * Generated by Animista on 2022-4-11 17:3:21
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+ @keyframes flicker-1{0%,100%{opacity:1}41.99%{opacity:1}42%{opacity:0}43%{opacity:0}43.01%{opacity:1}47.99%{opacity:1}48%{opacity:0}49%{opacity:0}49.01%{opacity:1}}
+
+.flicker-1{animation:flicker-1 2s linear infinite both}
+
+
+/* ----------------------------------------------
+ * Generated by Animista on 2022-4-12 4:1:54
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+/**
+ * ----------------------------------------
+ * animation slide-out-bck-center
+ * ----------------------------------------
+ */
+ @-webkit-keyframes slide-out-bck-center {
+    0% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateZ(-1100px);
+              transform: translateZ(-1100px);
+      opacity: 0;
+    }
+  }
+  @keyframes slide-out-bck-center {
+    0% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateZ(-1100px);
+              transform: translateZ(-1100px);
+      opacity: 0;
+    }
+  }
+  
+  .slide-out-bck-center {
+	-webkit-animation: slide-out-bck-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	animation: slide-out-bck-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+
+
+@keyframes changecolor {
+    0% {
+        background-color: #fff;
+        color: #4285f4;
+    }
+    100% {
+        background-color: #4285F4;
+        color: #fff;
+    }
+}
+
+@keyframes changecolorgreen {
+    0% {
+        background-color: #fff;
+        color: #3cba54;
+    }
+    100% {
+        background-color:#3cba54;
+        color: #fff;
+    }
+}
+
+@keyframes growbottom {
+    0% {
+        border-left: 1px solid #4285F4;
+    }
+    100% {
+        border-left: 5px solid #4285F4;
+    }
+}

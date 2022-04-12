@@ -1,0 +1,21 @@
+{% extends 'base.html' %}{% load static %}
+<title>{% block title %}MPM Tasks{% endblock title %}</title>
+{% block content %}
+    <h1 id="tasks_title">Tasks</h1>
+    <section id="tasks_container">
+        <div id="task-container">
+            <div id="form_wrapper">
+                <form id="form">
+                    <input type="text" id="title" name="title" class="form-control" placeholder="Titre de la tache"/>
+                    <input type="submit" id="submit" class="btn">
+                    <p id="nb_of_tasks"></p>
+                </form>
+            </div>
+            <div id="list_wrapper"></div>
+        </div>
+    </section>
+    
+
+    <script src="{% static 'js/display_task_list.js' %}"></script>
+    <script src="{% static 'js/display_task_details.js' %}"></script>
+{% endblock%}
