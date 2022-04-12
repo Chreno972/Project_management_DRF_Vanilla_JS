@@ -36,22 +36,6 @@ h1, h2, h3, h4, h5, p, span, strong, strike, a {
 #tasks_container{
     width: 100%;
     height: auto;
-    // #details_wrapper {
-    //     display: none;
-    //     width: 40%;
-    //     height: auto;
-    //     background-color: #fff;
-    //     color: #222;
-    //     position: fixed;
-    //     align-self: center;
-    //     border: #4285f4 solid 2px;
-    //     border-radius: 5px;
-    //     padding: 20px;
-    //     margin: 0 auto;
-    //     top: 50%; left: 50%; /* à 50%/50% du parent référent */
-    //     transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
-    //     z-index: 15;
-    // }
     #task-container {
         width: 100%;
         height: auto;
@@ -198,18 +182,6 @@ h1, h2, h3, h4, h5, p, span, strong, strike, a {
  * ----------------------------------------
  */
  @-webkit-keyframes slide-out-bck-center {
-    0% {
-      -webkit-transform: translateZ(0);
-              transform: translateZ(0);
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: translateZ(-1100px);
-              transform: translateZ(-1100px);
-      opacity: 0;
-    }
-  }
-  @keyframes slide-out-bck-center {
     0% {
       -webkit-transform: translateZ(0);
               transform: translateZ(0);
