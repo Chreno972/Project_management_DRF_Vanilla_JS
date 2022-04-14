@@ -1,5 +1,8 @@
 # Walkthrough
 
+## Problèmes non résolus
+- Impossible de réussir à effacer, créer, ou modifier une tache dans la page tasks sans qu'elle ne se recharge. On voit  qu'elle se rerender (reconstruit, ou recharge), à cause d'un petit flash lumineux. Durant le tuto que j'ai suivi, j'ai réussi à transformer certains aspects du code pour le rendre comme je le voulais. Sauf que je n'arrive pas à comprendre comment utiliser Ajax et la documentation à ce sujet est chronophage ou quasi inexistante et difficile à réadapter. Il me faudra donc abandonner cette idée, ou revenir sur ce side project d'entrainement plus tard.
+
 ## Sommaire
 
 [Terminer les settings](#terminer-les-settings)
@@ -694,9 +697,12 @@ Astuces CSS
 [top](#sommaire)
 ### Javascript des taches
 
-On crée un fichier display_task_list.js
+C'est la fonction javascript qui récupère le csrf token pour django
+Elle génère un token qui nous permet d'envoyer des données dans l'api
+django rest framework.
 
 ```javascript
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -715,29 +721,62 @@ function getCookie(name) {
     return cookieValue;
 }
 const csrftoken = getCookie('csrftoken');
+```
 
+---
+
+```javascript
 var active_item = null;
-
 buildList()
+```
 
+---
+
+La fonction qui finalise le CRUD des taches et appelle les
+autres fonctions attenantes à celles-ci.
+
+```javascript
 function buildList(){
+    // conteneur de la liste
     var wrapper = document.getElementById('list_wrapper')
+    // conteneur du formulaire
+    var form_wrapper = document.getElementById('form_wrapper')
+    // L'emplacement du compteur de taches
+    var nb_tasks = document.getElementById('nb_of_tasks')
+    // Dès le départ, le conteneur est vide afin d'éviter que le contenu
+    // du wrapper ne se répète au submit.
     wrapper.innerHTML = ''
 
-    var nb_tasks = document.getElementById('nb_of_tasks')
-
+    // L'url à fetcher (l'endpoint de l'API)
     var url = "http://127.0.0.1:8000/api/task-list/"
 
+    // fetch l'url du dessus(l'endpoint)
     fetch(url)
+    // puis ((réponse) => retourne réponse en format json)
     .then((resp) => resp.json())
+    // puis grâce à la fonction_anonyme(données_de_la_réponse)
     .then(function(data) {
+        // affiche les données de la réponse 
         console.log('Data:', data)
 
+        // stocke les données dans la variable list
         var list = data
+
+        // on crée une boucle sur list afin d'extraire les données,
+        // contenues sur l'endpoint fetché http://127.0.0.1:8000/api/task-list/,
+        // afin de réalier Create => C de CRUD, create, read, update, delete. 
+        // Ces données sont devenues: 
+        // url, puis resp, puis resp.json, puis data, puis list
         for (var i in list) {
 
+            // Crée un élément html span et stockes y l'élément de la liste nommé titre
+            // La classe de chaque balise sera égale au titre récupéré
             title = `<span class="title">${list[i].title}</span>`
 
+            // item correspond à une tache. Elle est composée d'éléments html dont on 
+            // se sert pour afficher la liste contenant le titre récupéré sur l'endpoint
+            // de l'API Rest. data_row_${i} signifie par exemple, si on dit i est le 3ème
+            // élément de la liste, alors son id sera id="data_row_${2}" =>0,1,2
             var item = `
                 <div id="data_row_${i}" class="task_wrapper flex_wrapper">
                     <div style="width:60%; text-align:left;">
@@ -749,27 +788,40 @@ function buildList(){
                     </div>
                 </div>
             `
+
+            // Une fois crée l'item est ajouté à 'wrapper' ou plutôt, 
+            // au conteneur HTML à l'id 'list_wrapper', 
+            // destiné à accueillir toutes les taches, 
             wrapper.innerHTML += item;
         }
 
+        // On refait une boucle sur la list => les données récupérées sur l'endpoint
+        // afin de valider les fonctions Update et Delete de CRUD, puis aussi de
+        // surligner et flouter les taches accomplies
         for (var i in list) {
             let editBtn = document.getElementsByClassName('edit')[i]
             let deleteBtn = document.getElementsByClassName('delete')[i]
             let title = document.getElementsByClassName('title')[i]
 
+            // Si un élément en provenance de l'api est marqué comme "completed = true",
+            // tu vas récupérer sa balise HTML correspondante par son ID généré lors de
+            // sa création, et effectue les modifications demandées (line-through et opacity)
             if (list[i].completed) {
                 var parent = document.getElementById(`data_row_${i}`)
                 parent.style.textDecoration = 'line-through'
                 parent.style.opacity = '0.2'
             }
 
+            // Si tu cliques sur le bouton html d'une tache dont la classe HTML
+            // est 'update', déclenches la fonction qui permet de la mettre à jour
             editBtn.addEventListener('click', (function(item) {
                 return function() {
                     edit_item(item)
                 }
             })(list[i]))
 
-
+            // Si tu cliques sur le bouton html d'une tache dont la classe HTML
+            // est 'delete', déclenches la fonction qui permet de l'effacer
             deleteBtn.addEventListener('click', (function(item) {
                     return function() {
                         delete_item(item)
@@ -778,6 +830,10 @@ function buildList(){
             })(list[i]))
 
 
+            // Si tu cliques sur le titre d'une tache dont la classe html est 'title',
+            // déclenches la fonction qui permet de modifier l'attribut completed de la tache
+            // au niveau de l'endpoint de l'API de false à true. Ainsi, lorsque la page se
+            // rerender, la condition if(list[i].completed) sera alors appliquée.
             title.addEventListener('click', (function(item) {
                 return function() {
                     strike_unstrike(item)
@@ -786,28 +842,46 @@ function buildList(){
             })(list[i]))
         }
 
+        // on ajoute le chiffre représentant le nombre de taches à son emplacement
+        // HTML 'nb_tasks', afin de savoir combien de taches en attente.
         nb_tasks.innerHTML = list.length
     })
 }
+```
 
-var form_wrapper = document.getElementById('form_wrapper')
+Un event listener qui permet de récupérer les données entrées
+dans le formulaire avant de les envoyer à l'API afin de valider
+le CRUD coté client et d'effacer son contenu après le click sur 
+le bouton submit.
 
+```javascript
 form_wrapper.addEventListener('submit', (e) => {
     e.preventDefault()
     console.log('Form submitted')
+    // url = endpoint de l'api qui créera une tache en son sein
+    // si active_item (tache dans l'api) n'existe pas
     var url = "http://127.0.0.1:8000/api/task-create/"
 
+    // Si un active_item existe déjà dans l'api
     if (active_item != null) {
+        // url = endpoint qui met à jour une tache à travers son id dans l'api 
+        // si active_item existe déja dans l'api
         var url = `http://127.0.0.1:8000/api/task-update/${active_item.id}/`
         active_item = null
     }
 
+    // si l'item n'existe pas dans l'api,
+    // titre = la valeur de la tache dont l'id est title
+    // va être envoyé en POST vers l'api sous format json
     var title = document.getElementById('title').value
     fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken,
+                'X-CSRFToken': csrftoken, 
+                // => const csrftoken = getCookie('csrftoken');
+                // la fonction du début qui permet d'obtenir 
+                // le csrf token.
             },
             body: JSON.stringify({
                 title: title
@@ -815,19 +889,34 @@ form_wrapper.addEventListener('submit', (e) => {
         }
     ).then(function(response) {
         buildList()
+        // efface le contenu du formulaire après 
+        // l'envoi des données.
         document.getElementById('form').reset()
     })
 })
+```
 
+---
+
+Fonction qui permet de modifier le titre d'une tache directement depuis le formulaire de contact.
+
+```javascript
 // EDIT ITEM
-
 function edit_item(item) {
     active_item = item
+    // récupère la valeur du formulaire = 
+    // ajoute le titre du l'item à la place
     document.getElementById('title').value = active_item.title
 }
+```
 
+---
+
+La fonction qui permet de supprimer une tache quand on appuie
+sur le bouton 'delete'
+
+```javascript
 // DELETE ITEM
-
 function delete_item(item) {
     fetch(`http://127.0.0.1:8000/api/task-delete/${item.id}/`, {
         method: 'DELETE',
@@ -840,9 +929,15 @@ function delete_item(item) {
         buildList()
     })
 }
+```
 
+---
+
+La fonction qui barre la tache quand on clique sur son conteneur
+pour certifier qu'elle est terminée.
+
+```javascript
 // STRIKE UNSTRIKE ITEM
-
 function strike_unstrike(item) {
     item.completed = !item.completed
     fetch(`http://127.0.0.1:8000/api/task-update/${item.id}/`, {

@@ -1,3 +1,4 @@
+// Fonction get cookie pour Django 
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -17,10 +18,17 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
+// ---------------------------------------------------------------------------------
+
+
 var active_item = null;
 
+
+// Appel de la fonction buildList
 buildList()
 
+
+// Création de la fonction buildList
 function buildList(){
     var wrapper = document.getElementById('list_wrapper')
     wrapper.innerHTML = ''
@@ -40,7 +48,7 @@ function buildList(){
             title = `<span class="title">${list[i].title}</span>`
 
             var item = `
-                <div id="data_row_${i}" class="task_wrapper flex_wrapper">
+                <div id="${i}" class="task_wrapper flex_wrapper">
                     <div style="width:60%; text-align:left;">
                         ${title}
                     </div>
@@ -53,15 +61,18 @@ function buildList(){
             wrapper.innerHTML += item;
         }
 
+        nb_tasks.innerHTML = list.length
+
         for (var i in list) {
             let editBtn = document.getElementsByClassName('edit')[i]
             let deleteBtn = document.getElementsByClassName('delete')[i]
             let title = document.getElementsByClassName('title')[i]
 
             if (list[i].completed) {
-                var parent = document.getElementById(`data_row_${i}`)
+                var parent = document.getElementById(`${i}`)
                 parent.style.textDecoration = 'line-through'
                 parent.style.opacity = '0.2'
+                nb_tasks.innerHTML -= 1
             }
 
             editBtn.addEventListener('click', (function(item) {
@@ -87,7 +98,6 @@ function buildList(){
             })(list[i]))
         }
 
-        nb_tasks.innerHTML = list.length
     })
 }
 
